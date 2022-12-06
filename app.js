@@ -3,6 +3,7 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+
 const { NOT_FOUND, INTERNAL_SERVER_ERROR } = require('./constants/responseStatuses');
 
 const usersRouter = require('./routes/users');
