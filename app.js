@@ -6,7 +6,7 @@ const logger = require('morgan');
 
 const { NOT_FOUND, INTERNAL_SERVER_ERROR } = require('./constants/responseStatuses');
 
-const newsRouter = require('./routes/news');
+const newsRouter = require('./routes/newsRouter');
 
 const app = express();
 

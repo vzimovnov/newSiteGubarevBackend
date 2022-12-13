@@ -1,3 +1,3 @@
-const ERROR = 'Something goes wrong';
+const BAD_REQUEST_MESSAGE = 'Something goes wrong';
 
-module.exports = { ERROR };
+module.exports = { BAD_REQUEST_MESSAGE };
