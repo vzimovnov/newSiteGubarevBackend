@@ -6,7 +6,7 @@ const logger = require('morgan');
 
 const { NOT_FOUND, INTERNAL_SERVER_ERROR } = require('./constants/responseStatuses');
 
-const usersRouter = require('./routes/users');
+const newsRouter = require('./routes/news');
 
 const app = express();
 
@@ -16,7 +16,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/users', usersRouter);
+app.use('/news', newsRouter);
 
 app.use((req, res, next) => {
   next(createError(NOT_FOUND));

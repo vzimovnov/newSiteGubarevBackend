@@ -38,25 +38,25 @@ module.exports = (sequelize, DataTypes) => {
       },
       avatar: { type: DataTypes.STRING },
     },
-    User.beforeSave(async (user) => {
-      if (user.changed('password')) {
-        user.password = await bcrypt.hash(user.password, SALT);
-      }
-    }),
-    User.prototype.comparePassword = function compare(password) {
-      return new Promise((res, rej) => {
-        bcrypt.compare(password, this.password, (error, isMatch) => {
-          if (error) {
-            return rej(error);
-          }
-          return res(isMatch);
-        });
-      });
-    },
     {
       sequelize,
       modelName: 'User',
     },
   );
+  User.beforeSave(async (user) => {
+    if (user.changed('password')) {
+      user.password = await bcrypt.hash(user.password, SALT);
+    }
+  });
+  User.prototype.comparePassword = function compare(password) {
+    return new Promise((res, rej) => {
+      bcrypt.compare(password, this.password, (error, isMatch) => {
+        if (error) {
+          return rej(error);
+        }
+        return res(isMatch);
+      });
+    });
+  };
   return User;
 };
