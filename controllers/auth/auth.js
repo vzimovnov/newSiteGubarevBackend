@@ -45,7 +45,7 @@ module.exports = {
         },
       );
       if (candidate) {
-        res.status(ANOTHER_USER).send(ALREADY_EXIST);
+        res.status(BAD_REQUEST).send(ALREADY_EXIST);
       }
       const user = await User.create(payload);
       const token = generateToken(user.id);
