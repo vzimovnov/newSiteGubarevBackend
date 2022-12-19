@@ -1,7 +1,7 @@
 const { Op } = require('sequelize');
-const jwt = require('jsonwebtoken');
 
 const { User } = require('../../models');
+const { generateToken } = require('../../utils/tokenGeneration');
 const {
   EMPTY_FIELD,
   ALREADY_EXIST,
@@ -10,11 +10,9 @@ const {
 } = require('../../constants/responseMessages');
 const {
   BAD_REQUEST,
-  UNAUTHORIZED,
+  ANOTHER_USER,
   OK,
 } = require('../../constants/responseStatuses');
-
-const generateToken = (id) => `${jwt.sign(id, process.env.SECRET)}`;
 
 module.exports = {
   async register(req, res) {
@@ -39,15 +37,15 @@ module.exports = {
           || !payload.email) {
         return res.status(BAD_REQUEST).send(EMPTY_FIELD);
       }
-      const kekUser = await User.findOne(
+      const candidate = await User.findOne(
         {
           where: {
             [Op.or]: [{ email }, { login }],
           },
         },
       );
-      if (kekUser) {
-        res.status(UNAUTHORIZED).send(ALREADY_EXIST);
+      if (candidate) {
+        res.status(ANOTHER_USER).send(ALREADY_EXIST);
       }
       const user = await User.create(payload);
       const token = generateToken(user.id);
@@ -71,6 +69,9 @@ module.exports = {
           password,
         },
       } = req;
+      if (!email.trim() || !password.trim()) {
+        return res.status(BAD_REQUEST).send(EMPTY_FIELD);
+      }
       const user = await User.findOne({ where: { email } });
       if (!user) {
         return res.status(BAD_REQUEST).send(USER_NOT_FOUND);
@@ -81,7 +82,7 @@ module.exports = {
       }
       const token = generateToken(user.id);
       return res.status(OK).json({
-        token: `Bearer ${token}`,
+        token,
         user: {
           id: user.id,
           login: user.login,
