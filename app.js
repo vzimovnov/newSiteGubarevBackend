@@ -3,10 +3,13 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+const cors = require('cors');
+const passport = require('passport');
 
 const { NOT_FOUND, INTERNAL_SERVER_ERROR } = require('./constants/responseStatuses');
 
 const newsRouter = require('./routes/newsRouter');
+const authRouter = require('./routes/authRouter');
 
 const app = express();
 
@@ -15,7 +18,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(cors());
+app.use(passport.initialize());
+require('./middleware/passport')(passport);
 
+app.use('/auth', authRouter);
 app.use('/news', newsRouter);
 
 app.use((req, res, next) => {
