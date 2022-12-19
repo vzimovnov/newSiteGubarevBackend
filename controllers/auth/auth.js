@@ -2,7 +2,17 @@ const { Op } = require('sequelize');
 const jwt = require('jsonwebtoken');
 
 const { User } = require('../../models');
-const user = require('../../models/user');
+const {
+  EMPTY_FIELD,
+  ALREADY_EXIST,
+  WRONG_PASSWORD,
+  USER_NOT_FOUND,
+} = require('../../constants/responseMessages');
+const {
+  BAD_REQUEST,
+  UNAUTHORIZED,
+  OK,
+} = require('../../constants/responseStatuses');
 
 const generateToken = (id) => `${jwt.sign(id, process.env.SECRET)}`;
 
@@ -27,7 +37,7 @@ module.exports = {
           || !password
           || !payload.name
           || !payload.email) {
-        return res.status(400).send('Передумай');
+        return res.status(BAD_REQUEST).send(EMPTY_FIELD);
       }
       const kekUser = await User.findOne(
         {
@@ -37,11 +47,11 @@ module.exports = {
         },
       );
       if (kekUser) {
-        res.status(401).send('Такой уже есть, не надо');
+        res.status(UNAUTHORIZED).send(ALREADY_EXIST);
       }
       const user = await User.create(payload);
       const token = generateToken(user.id);
-      return res.status(200).json({
+      return res.status(OK).json({
         token,
         user: {
           id: user.id,
@@ -49,7 +59,7 @@ module.exports = {
         },
       });
     } catch (error) {
-      return res.status(400).send(error);
+      return res.status(BAD_REQUEST).send(error);
     }
   },
 
@@ -63,14 +73,14 @@ module.exports = {
       } = req;
       const user = await User.findOne({ where: { email } });
       if (!user) {
-        return res.status().send();
+        return res.status(BAD_REQUEST).send(USER_NOT_FOUND);
       }
       const isValidPassword = await user.comparePassword(password);
       if (!isValidPassword) {
-        return res.status(400).send('Придержи коней');
+        return res.status(BAD_REQUEST).send(WRONG_PASSWORD);
       }
       const token = generateToken(user.id);
-      return res.status(200).json({
+      return res.status(OK).json({
         token: `Bearer ${token}`,
         user: {
           id: user.id,
@@ -78,13 +88,13 @@ module.exports = {
         },
       });
     } catch (error) {
-      return res.status(400).send(error);
+      return res.status(BAD_REQUEST).send(error);
     }
   },
 
   async whoAmI(req, res) {
     const { user: { id, login } } = req;
-    return res.status(200).send({
+    return res.status(OK).send({
       id,
       login,
     });
