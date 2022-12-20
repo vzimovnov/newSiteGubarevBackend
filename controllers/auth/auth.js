@@ -10,7 +10,6 @@ const {
 } = require('../../constants/responseMessages');
 const {
   BAD_REQUEST,
-  ANOTHER_USER,
   OK,
 } = require('../../constants/responseStatuses');
 
@@ -45,7 +44,7 @@ module.exports = {
         },
       );
       if (candidate) {
-        res.status(BAD_REQUEST).send(ALREADY_EXIST);
+        return res.status(BAD_REQUEST).send(ALREADY_EXIST);
       }
       const user = await User.create(payload);
       const token = generateToken(user.id);
