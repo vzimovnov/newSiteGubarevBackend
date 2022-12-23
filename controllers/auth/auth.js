@@ -25,10 +25,10 @@ module.exports = {
         },
       } = req;
       const payload = {
-        login: login.trim(),
+        login: login?.trim(),
         password,
-        name: name.trim(),
-        email: email.trim(),
+        name: name?.trim(),
+        email: email?.trim(),
       };
       if (!payload.login
           || !password
@@ -64,14 +64,14 @@ module.exports = {
     try {
       const {
         body: {
-          email,
+          login,
           password,
         },
       } = req;
-      if (!email.trim() || !password.trim()) {
+      if (!login.trim() || !password.trim()) {
         return res.status(BAD_REQUEST).send(EMPTY_FIELD);
       }
-      const user = await User.findOne({ where: { email } });
+      const user = await User.findOne({ where: { login } });
       if (!user) {
         return res.status(BAD_REQUEST).send(USER_NOT_FOUND);
       }
