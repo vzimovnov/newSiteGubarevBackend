@@ -10,6 +10,7 @@ const { NOT_FOUND, INTERNAL_SERVER_ERROR } = require('./constants/responseStatus
 
 const newsRouter = require('./routes/newsRouter');
 const authRouter = require('./routes/authRouter');
+const userRouter = require('./routes/userRouter');
 
 const app = express();
 
@@ -24,6 +25,7 @@ require('./middleware/passport')(passport);
 
 app.use('/auth', authRouter);
 app.use('/news', newsRouter);
+app.use('/users', userRouter);
 
 app.use((req, res, next) => {
   next(createError(NOT_FOUND));
