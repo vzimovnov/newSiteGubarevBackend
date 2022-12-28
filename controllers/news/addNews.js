@@ -1,5 +1,4 @@
 const { News } = require('../../models');
-
 const { BAD_REQUEST_MESSAGE } = require('../../constants/responseMessages');
 const { BAD_REQUEST, CREATED } = require('../../constants/responseStatuses');
 
@@ -16,7 +15,7 @@ module.exports = {
         user: {
           id,
         },
-        file = {},
+        file,
       } = req;
       if (!title.trim() || !content.trim() || !tags.trim()) {
         return res.status(BAD_REQUEST).send(BAD_REQUEST_MESSAGE);
@@ -25,7 +24,7 @@ module.exports = {
         title,
         content,
         userId: id,
-        picture: file?.path,
+        picture: file ? file?.path.replace('public/', '') : 'defaultImages/News.jpg',
         tags,
       });
       return res.status(CREATED).send(news);

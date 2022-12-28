@@ -1,8 +1,10 @@
 const multer = require('multer');
 
+const FILE_SIZE = 10 * 1024 * 1024;
+
 const storage = multer.diskStorage({
   destination(req, file, cb) {
-    cb(null, '../public/images');
+    cb(null, 'public/images/');
   },
   filename(req, file, cb) {
     cb(null, `${file.originalname}`);
@@ -10,7 +12,12 @@ const storage = multer.diskStorage({
 });
 
 const fileFilter = (req, file, cb) => {
-  if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
+  if (file.mimetype === 'image/jpeg'
+    || file.mimetype === 'image/png'
+    || file.mimetype === 'image/jpg'
+    || file.mimetype === 'image/gif'
+    || file.mimetype === 'image/svg'
+    || file.mimetype === 'image/webp') {
     cb(null, true);
   } else {
     cb(null, false);
@@ -18,7 +25,7 @@ const fileFilter = (req, file, cb) => {
 };
 
 const limits = {
-  fileSize: 10 * 1024 * 1024,
+  FILE_SIZE,
 };
 
 module.exports = multer({ storage, fileFilter, limits });
