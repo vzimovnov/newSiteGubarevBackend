@@ -10,6 +10,7 @@ module.exports = {
           order: [
             ['id', 'ASC'],
           ],
+          attributes: { exclude: ['createdAt', 'updatedAt'] },
           include: [{
             model: User,
             as: 'user',

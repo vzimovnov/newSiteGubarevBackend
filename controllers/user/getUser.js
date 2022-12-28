@@ -13,7 +13,7 @@ module.exports = {
             model: News,
             as: 'news',
           }],
-          attributes: { exclude: ['password'] },
+          attributes: { exclude: ['password', 'createdAt', 'updatedAt'] },
         });
       if (!user) {
         return res.status(BAD_REQUEST).send({ USER_NOT_FOUND });
