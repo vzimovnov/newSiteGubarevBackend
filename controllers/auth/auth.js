@@ -68,7 +68,7 @@ module.exports = {
           password,
         },
       } = req;
-      if (!login.trim() || !password.trim()) {
+      if (!login.trim() || !password) {
         return res.status(BAD_REQUEST).send(EMPTY_FIELD);
       }
       const user = await User.findOne({ where: { login } });
