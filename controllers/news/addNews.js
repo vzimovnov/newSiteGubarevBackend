@@ -24,7 +24,7 @@ module.exports = {
         title,
         content,
         userId: id,
-        picture: file ? file?.path.replace('public/', '') : 'defaultImages/News.jpg',
+        picture: file ? file?.path.replace('public/', '') : null,
         tags,
       });
       return res.status(CREATED).send(news);
