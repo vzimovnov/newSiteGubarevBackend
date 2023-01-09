@@ -8,7 +8,7 @@ const router = express.Router();
 
 router.get('/:id', getUser);
 router.patch(
-  '/:id',
+  '/',
   passport.authenticate('jwt', { session: false }),
   uploadFile.single('avatar'),
   updateUser,
