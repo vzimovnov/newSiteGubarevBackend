@@ -1,8 +1,7 @@
 const express = require('express');
 const passport = require('passport');
 
-const { news: { getNews } } = require('../controllers');
-const { addNews } = require('../controllers/news/addNews');
+const { news: { getNews, addNews } } = require('../controllers');
 const uploadFile = require('../middleware/uploadFile');
 
 const router = express.Router();
