@@ -17,7 +17,7 @@ module.exports = {
         },
         file,
       } = req;
-      if (!title.trim() || !content.trim() || !tags.trim()) {
+      if (!title.trim() || !content.trim()) {
         return res.status(BAD_REQUEST).send(BAD_REQUEST_MESSAGE);
       }
       const news = await News.create({
